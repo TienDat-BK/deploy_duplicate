@@ -74,13 +74,13 @@ class FaissSearch:
                     if i == j or j == -1:
                         continue
                     if sim >= self.threshold:
-                        dsu.union(i, j)
+                        dsu.unionSet(i, j)
             elif self.metric == "hamming":
                 for j, dist in zip(idxs[i], dists[i]):
                     if i == j or j == -1:
                         continue
                     if dist <= self.threshold:
-                        dsu.union(i, j)
+                        dsu.unionSet(i, j)
 
         groups_idx = dsu.getGroups()
         groups = [[setOfVecRecord[i] for i in group] for group in groups_idx if group]
