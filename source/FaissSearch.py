@@ -4,7 +4,7 @@ from HSmodule import VectorRecord, DSU
 
 class FaissSearch:
     def __init__(self):
-        self.threshold = None
+        self.threshold = 0
         self.index = None
         self.metric = None # "cosine" hoặc "hamming"
         self.dim = 384
@@ -34,12 +34,22 @@ class FaissSearch:
         return sims, idxs
     
     def hammingDistance(self, vecs: list[np.ndarray], k: int):
-        vecs = np.stack(vecs).astype("uint8")
+        # Chuyển int → bit → pack
+        binaries = []
+        for v in vecs:
+            v8 = np.array([x % 256 for x in v], dtype=np.uint8)
+            bits = np.unpackbits(v8[:, np.newaxis], axis=1).reshape(-1)
+            binaries.append(bits)
+        binary_bits = np.stack(binaries).astype('uint8')
+        bin_array = np.packbits(binary_bits, axis=1)
+
         self.index.reset()
-        self.index.add(vecs)
+        self.index.add(bin_array)
         k = min(k, len(vecs))
-        dists, idxs = self.index.search(vecs, k)
+        dists, idxs = self.index.search(bin_array, k)
         return dists, idxs
+
+    
 
     def classify(self, setOfVecRecord : list[VectorRecord]) -> list[list[VectorRecord]]: 
         if not setOfVecRecord:
@@ -61,11 +71,6 @@ class FaissSearch:
 
         else:
             raise ValueError(f"Unsupported metric: {self.metric}")
-        
-        for i in range(len(sims)):
-            print(f"Vector {i}:")
-            for j in range(len(sims[i])):
-                print(f"  Neigh {j}: idx={idxs[i][j]}, sim={sims[i][j]:.4f}")
 
         dsu = DSU(n)
         for i in range(n):
