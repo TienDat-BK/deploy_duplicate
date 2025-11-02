@@ -26,7 +26,6 @@ class FaissSearch:
         
     def cosineDistance(self, vecs: np.ndarray, k: int): 
         vecs = vecs.astype("float32")
-        vecs = vecs / np.linalg.norm(vecs, axis=1, keepdims=True)
         self.index.reset()
         self.index.add(vecs)
         k = min(k, len(vecs))
@@ -48,6 +47,7 @@ class FaissSearch:
         
         n = len(setOfVecRecord)
         self.createIndex(self.metric) #Khởi tạo faiss index theo metric đã gán
+        self.dim = len(setOfVecRecord[0].vec)
         if self.metric is None:
             raise ValueError("Metric not set. Call createIndex(metric) before classify().")
 
