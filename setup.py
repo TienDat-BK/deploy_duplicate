@@ -17,7 +17,7 @@ ext_modules = [
         ],
         language='c++',
         cxx_std=17,
-        extra_compile_args=["-O3", "-Wall", "-fPIC"],
+        extra_compile_args=["-O3", "-Ofast", "-march=native", "-DNDEBUG", "-std=c++17"],
     ),
 ]
 

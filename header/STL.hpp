@@ -16,6 +16,5 @@
 #include <cstdint>
 #include <stdexcept>
 #include <cstdint>
-#include <limits> 
+#include <limits>
 using namespace std;
-#define mod 1000000007;

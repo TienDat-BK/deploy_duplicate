@@ -1,6 +1,6 @@
 #include "header/MurmurHash3.hpp"
 #include <cmath>
-#include "../header/ISearch.hpp"
+#include "../header/LSHSearch.hpp"
 #include <iostream>
 #include <vector>
 #include <random>
@@ -8,16 +8,17 @@
 #include "../header/BloomFilter.hpp"
 using namespace std;
 
-int main() {
+int main()
+{
     // expectedItems = 10, falsePositiveRate = 0.01
     BloomFilter bf(0, 0, 10, 0.01);
 
     vector<VectorRecord> input = {
         {1, {1.0, 2.0, 3.0}},
-        {2, {1.0, 2.0, 3.0}},   // trùng với vector đầu
+        {2, {1.0, 2.0, 3.0}}, // trùng với vector đầu
         {3, {4.0, 5.0, 6.0}},
         {4, {7.0, 8.0, 9.0}},
-        {5, {4.0, 5.0, 6.0}}    // trùng với vector thứ 3
+        {5, {4.0, 5.0, 6.0}} // trùng với vector thứ 3
     };
 
     // Dùng BloomFilter lọc trùng
@@ -29,9 +30,11 @@ int main() {
     cout << endl;
 
     // In ra các vector còn lại sau khi lọc
-    for (size_t i = 0; i < output.size(); ++i) {
+    for (size_t i = 0; i < output.size(); ++i)
+    {
         cout << "Vector " << i + 1 << ": ";
-        for (double v : output[i].vec) {
+        for (double v : output[i].vec)
+        {
             cout << v << " ";
         }
         cout << endl;
@@ -39,4 +42,4 @@ int main() {
 
     return 0;
 }
-//g++ -std=c++17 -O2 -Iheader -o my_program main.cpp source/MurmurHash3.cpp source/BloomFilter.cpp
+// g++ -std=c++17 -O2 -Iheader -o my_program main.cpp source/MurmurHash3.cpp source/BloomFilter.cpp

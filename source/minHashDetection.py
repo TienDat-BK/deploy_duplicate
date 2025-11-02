@@ -5,8 +5,8 @@ class MinHashDetection:
     def __init__(self):
         self.preprocessor = Shingling()
         self.hasher = MinHash()
-        self.searcher = Search()
-        self.searcher.setDisFunc("hamming")
+        self.searcher = LSHSearch()
+        self.searcher.setDisFunc("jarcard")
         self.outputDim = 64
 
     def detect(self, ListOfText : list ):
@@ -16,7 +16,9 @@ class MinHashDetection:
         sizeOfVector = len(ListOfVecRecord[0].vec)
         self.hasher.setInOutput( sizeOfVector, self.outputDim)
 
-        clusters = self.searcher.classify(ListOfVecRecord) 
+        listVecHashed = self.hasher.hash(ListOfVecRecord)
+
+        clusters = self.searcher.classify(listVecHashed)
 
         # clustering đang là dạng list of list of VecRecord
         

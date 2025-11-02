@@ -7,7 +7,7 @@ class FaissSearch:
         self.threshold = None
         self.index = None
         self.metric = None # "cosine" hoặc "hamming"
-        self.dim = 384
+        self.dim = None
         self.bbit = 8
 
     def createIndex(self, metric: str):

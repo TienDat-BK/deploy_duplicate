@@ -18,6 +18,7 @@
     "text_encoding": "cpp",
     "stdexcept": "cpp",
     "algorithm": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "type_traits": "cpp"
   }
 }
