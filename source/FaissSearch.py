@@ -32,7 +32,7 @@ class FaissSearch:
         sims, idxs = self.index.search(vecs, k)
         return sims, idxs
     
-    def HammingDistance(self, vecs: list[np.ndarray], k: int):
+    def hammingDistance(self, vecs: list[np.ndarray], k: int):
         vecs = np.stack(vecs).astype("uint8")
         self.index.reset()
         self.index.add(vecs)
@@ -61,6 +61,11 @@ class FaissSearch:
         else:
             raise ValueError(f"Unsupported metric: {self.metric}")
         
+        for i in range(len(sims)):
+            print(f"Vector {i}:")
+            for j in range(len(sims[i])):
+                print(f"  Neigh {j}: idx={idxs[i][j]}, sim={sims[i][j]:.4f}")
+
         dsu = DSU(n)
         for i in range(n):
             if self.metric == "cosine":
