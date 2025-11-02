@@ -30,6 +30,7 @@ class FaissSearch:
         self.index.add(vecs)
         k = min(k, len(vecs))
         sims, idxs = self.index.search(vecs, k)
+        sims = (sims - sims.min()) / (sims.max() - sims.min())
         return sims, idxs
     
     def hammingDistance(self, vecs: list[np.ndarray], k: int):
