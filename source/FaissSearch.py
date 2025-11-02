@@ -4,36 +4,72 @@ from HSmodule import VectorRecord, DSU
 
 class FaissSearch:
     def __init__(self):
-        self.threshold = 0.8
+        self.threshold = None
+        self.index = None
+        self.metric = None # "cosine" hoặc "hamming"
+        self.dim = 384
+        self.bbit = 8
 
-        # Tạo 1 đồ thị HNSW trong không gian 384 chiều, mỗi node có tối đa 32 cạnh
-        self.index = faiss.IndexHNSWFlat(384, 32, faiss.METRIC_INNER_PRODUCT)
-        self.index.hnsw.efSearch = 64 #Số lượng node được duyệt khi tìm kiếm
-
-    def classify(self, setOfVecRecord : list[VectorRecord]) -> list[list[VectorRecord]]:
-        if not setOfVecRecord:
-            return []
+    def createIndex(self, metric: str):
+        if (metric == "cosine"):
+            # Tạo 1 đồ thị HNSW trong không gian 384 chiều, mỗi node có tối đa 32 cạnh
+            self.index = faiss.IndexHNSWFlat(self.dim, 32, faiss.METRIC_INNER_PRODUCT) 
+            self.index.hnsw.efSearch = 64 #Số lượng node được duyệt khi tìm kiếm
+            self.threshold = 0.2
+        elif metric == "hamming":
+            # Với b-bit minhash → binary vector, tổng số bit = dim * bbit
+            n_bits = self.dim * self.bbit
+            self.index = faiss.IndexBinaryFlat(n_bits)
+            self.threshold = 0.4 * n_bits
+        else:
+            raise ValueError(f"Unsupported metric: {metric}")
         
-        # Thêm các VectorRecord vào faiss
-        n = len(setOfVecRecord)
-        vecs = np.stack([v.vec for v in setOfVecRecord]).astype("float32")
+    def cosineDistance(self, vecs: np.ndarray, k: int): 
+        vecs = vecs.astype("float32")
         vecs = vecs / np.linalg.norm(vecs, axis=1, keepdims=True)
         self.index.reset()
         self.index.add(vecs)
+        k = min(k, len(vecs))
+        sims, idxs = self.index.search(vecs, k)
+        dists = 1 - sims
+        return dists, idxs
+    
+    def HammingDistance(self, vecs: list[np.ndarray], k: int):
+        vecs = np.stack(vecs).astype("uint8")
+        self.index.reset()
+        self.index.add(vecs)
+        k = min(k, len(vecs))
+        dists, idxs = self.index.search(vecs, k)
+        return dists, idxs
 
-        # Faiss search trả về độ tương đồng và index của k-nearest neighbors (Sử dụng cosine similarity)
-        k = min(100, n) # k không vượt quá số vector
-        similarities, indices = self.index.search(vecs, k)
-        dsu = DSU(n)
+    def classify(self, setOfVecRecord : list[VectorRecord]) -> list[list[VectorRecord]]: 
+        if not setOfVecRecord:
+            return []
         
+        n = len(setOfVecRecord)
+        self.createIndex(self.metric) #Khởi tạo faiss index theo metric đã gán
+        if self.metric is None:
+            raise ValueError("Metric not set. Call createIndex(metric) before classify().")
+
+        if self.metric == "cosine":
+            vecs = np.stack([v.vec for v in setOfVecRecord])
+            dists, idxs = self.cosineDistance(vecs, k=100)
+
+        elif self.metric == "hamming":
+            vecs = [v.vec for v in setOfVecRecord]
+            dists, idxs = self.hammingDistance(vecs, k=100)
+
+        else:
+            raise ValueError(f"Unsupported metric: {self.metric}")
+        
+        dsu = DSU(n)
         for i in range(n):
-            for j, sim in zip(indices[i], similarities[i]):
+            for j, dist in zip(idxs[i], dists[i]):
                 #Nếu vector được so sánh là chính nó hoặc không tìm thấy vector nào khác thì bỏ qua
                 if i == j or j == -1:
                     continue
 
-                # Nếu độ tương đồng vượt ngưỡng -> gộp nhóm
-                if sim > self.threshold:
+                if dist < self.threshold:
                     dsu.unionSet(i, j)
 
         groups_idx = dsu.getGroups()
