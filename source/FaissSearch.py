@@ -37,12 +37,6 @@ class FaissSearch:
         # Chỉ lấy 8 bit cuối mỗi số, chuyển trực tiếp thành uint8
         bin_array = np.stack([np.array([x % 256 for x in v], dtype=np.uint8) for v in vecs])
 
-        # Debug: in 8 bit cuối của 1 vài số đầu tiên
-        for i, v in enumerate(bin_array[:5]):
-            print(f"Vector {i} bytes: {v}")
-            bits = np.unpackbits(v)
-            print(f"Vector {i} bits: {bits}")
-
         if self.index is None:
             self.index = faiss.IndexBinaryFlat(bin_array.shape[1]*8)
 
@@ -50,12 +44,6 @@ class FaissSearch:
         self.index.add(bin_array)
         k = min(k, len(vecs))
         dists, idxs = self.index.search(bin_array, k)
-
-        # Debug: in distance matrix
-        print("\nHamming distance matrix:")
-        for i in range(len(dists)):
-            print(f"Vector {i}: {list(dists[i])} -> idxs: {list(idxs[i])}")
-
         return dists, idxs
 
     def classify(self, setOfVecRecord : list[VectorRecord]) -> list[list[VectorRecord]]: 
