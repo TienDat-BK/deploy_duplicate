@@ -34,22 +34,17 @@ class FaissSearch:
         return sims, idxs
     
     def hammingDistance(self, vecs: list[np.ndarray], k: int):
-        # Chuyển int → bit → pack
-        binaries = []
-        for v in vecs:
-            v8 = np.array([x % 256 for x in v], dtype=np.uint8)
-            bits = np.unpackbits(v8[:, np.newaxis], axis=1).reshape(-1)
-            binaries.append(bits)
-        binary_bits = np.stack(binaries).astype('uint8')
-        bin_array = np.packbits(binary_bits, axis=1)
+        # Chỉ lấy 8 bit cuối mỗi số, chuyển trực tiếp thành uint8
+        bin_array = np.stack([np.array([x % 256 for x in v], dtype=np.uint8) for v in vecs])
+
+        if self.index is None:
+            self.index = faiss.IndexBinaryFlat(bin_array.shape[1]*8)
 
         self.index.reset()
         self.index.add(bin_array)
         k = min(k, len(vecs))
         dists, idxs = self.index.search(bin_array, k)
         return dists, idxs
-
-    
 
     def classify(self, setOfVecRecord : list[VectorRecord]) -> list[list[VectorRecord]]: 
         if not setOfVecRecord:
