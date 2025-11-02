@@ -7,13 +7,14 @@ class FaissSearch:
         self.threshold = None
         self.index = None
         self.metric = None # "cosine" hoặc "hamming"
-        self.dim = None
+        self.dim = 384
         self.bbit = 8
 
     def createIndex(self, metric: str):
         if (metric == "cosine"):
             # Tạo 1 đồ thị HNSW trong không gian 384 chiều, mỗi node có tối đa 32 cạnh
-            self.index = faiss.IndexHNSWFlat(self.dim, 32, faiss.METRIC_INNER_PRODUCT) 
+            self.index = faiss.IndexHNSWFlat(self.dim, 32)
+            self.index.metric_type = faiss.METRIC_INNER_PRODUCT 
             self.index.hnsw.efSearch = 64 #Số lượng node được duyệt khi tìm kiếm
             self.threshold = 0.2
         elif metric == "hamming":
