@@ -25,6 +25,7 @@ class FaissSearch:
         
     def cosineSimilarity(self, vecs: np.ndarray, k: int): 
         vecs = vecs.astype("float32")
+        faiss.normalize_L2(vecs) 
         self.index.reset()
         self.index.add(vecs)
         k = min(k, len(vecs))
