@@ -16,12 +16,10 @@ class FaissSearch:
             self.index = faiss.IndexHNSWFlat(self.dim, 32)
             self.index.metric_type = faiss.METRIC_INNER_PRODUCT 
             self.index.hnsw.efSearch = 64 #Số lượng node được duyệt khi tìm kiếm
-            self.threshold = 0.2
         elif metric == "hamming":
             # Với b-bit minhash → binary vector, tổng số bit = dim * bbit
             n_bits = self.dim * self.bbit
             self.index = faiss.IndexBinaryFlat(n_bits)
-            self.threshold = 0.4 * n_bits
         else:
             raise ValueError(f"Unsupported metric: {metric}")
         
@@ -47,8 +45,8 @@ class FaissSearch:
             return []
         
         n = len(setOfVecRecord)
-        self.createIndex(self.metric) #Khởi tạo faiss index theo metric đã gán
         self.dim = len(setOfVecRecord[0].vec)
+        self.createIndex(self.metric) #Khởi tạo faiss index theo metric đã gán
         if self.metric is None:
             raise ValueError("Metric not set. Call createIndex(metric) before classify().")
 
