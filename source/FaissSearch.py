@@ -73,7 +73,7 @@ class FaissSearch:
                 for j, sim in zip(idxs[i], sims[i]):
                     if i == j or j == -1:
                         continue
-                    if sim >= self.threshold:
+                    if sim <= self.threshold:
                         dsu.unionSet(i, j)
             elif self.metric == "hamming":
                 for j, dist in zip(idxs[i], dists[i]):
