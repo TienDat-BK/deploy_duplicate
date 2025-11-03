@@ -17,5 +17,6 @@ void bind_search(py::module_ &m)
 
         .def_readwrite("disFunc", &LSHSearch::disFunc)
         .def_readwrite("num_bands", &LSHSearch::num_bands)
+        .def_readwrite("bandSize", &LSHSearch::bandSize)
         .def_readwrite("threshold", &LSHSearch::threshold);
 }
