@@ -1,5 +1,5 @@
 from HSmodule import *
-from source.FaissSearch import FaissSearcher
+from source.FaissSearch import FaissSearch
 from source.Preprocessor import Shingling, TextEmbedder
 
 class SimHashDetection:
@@ -9,7 +9,7 @@ class SimHashDetection:
         self.hasher = SimHash()
         self.outputDim = 128
 
-        self.searcher = FaissSearcher()
+        self.searcher = FaissSearch()
         self.searcher.setDisFunc("cosine")
         self.searcher.dim = self.outputDim
 
