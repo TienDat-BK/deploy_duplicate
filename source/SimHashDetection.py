@@ -10,6 +10,7 @@ class SimHashDetection:
         self.outputDim = 128
 
         self.searcher = FaissSearch()
+        self.searcher.threshold = 0.2
         self.searcher.setDisFunc("cosine")
         self.searcher.dim = self.outputDim
 
