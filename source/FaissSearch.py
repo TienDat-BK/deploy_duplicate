@@ -67,6 +67,8 @@ class FaissSearch:
         else:
             raise ValueError(f"Unsupported metric: {self.metric}")
 
+        sims = 1 - sims  # Chuyển similarity thành distance
+
         dsu = DSU(n)
         for i in range(n):
             if self.metric == "cosine":
