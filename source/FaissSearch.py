@@ -11,6 +11,7 @@ class FaissSearch:
         self.bbit = 8
 
     def setDisFunc(self, metric: str):
+        self.metric = metric
         if (metric == "cosine"):
             # Tạo 1 đồ thị HNSW trong không gian 384 chiều, mỗi node có tối đa 32 cạnh
             self.index = faiss.IndexHNSWFlat(self.dim, 32)
@@ -52,7 +53,6 @@ class FaissSearch:
         
         n = len(setOfVecRecord)
         self.dim = len(setOfVecRecord[0].vec)
-        self.setDisFunc(self.metric) #Khởi tạo faiss index theo metric đã gán
         if self.metric is None:
             raise ValueError("Metric not set. Call setDisFunc(metric) before classify().")
 
