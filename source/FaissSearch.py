@@ -53,6 +53,9 @@ class FaissSearch:
         
         n = len(setOfVecRecord)
         self.dim = len(setOfVecRecord[0].vec)
+
+        self.setDisFunc(self.metric)
+
         if self.metric is None:
             raise ValueError("Metric not set. Call setDisFunc(metric) before classify().")
 
