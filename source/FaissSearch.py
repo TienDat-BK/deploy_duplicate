@@ -219,6 +219,8 @@ class FaissSearch:
             # 3. Chuyển đổi Similarity (độ tương đồng) thành Distance (khoảng cách)
             # Cosine Distance = 1.0 - Cosine Similarity
             dists = (1.0 - sims) / 2
+            print(dists)
+            print("_________________________")
 
         elif self.metric == "hamming":
             # 1. Chuẩn bị dữ liệu: Chuyển đổi thành mảng binary
