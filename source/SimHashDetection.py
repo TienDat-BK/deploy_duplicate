@@ -5,7 +5,8 @@ from source.Preprocessor import Shingling, TextEmbedder
 class SimHashDetection:
     def __init__(self):
         self.preprocessor = TextEmbedder()
-
+        
+       
         self.hasher = SimHash()
         self.outputDim = 128
 
