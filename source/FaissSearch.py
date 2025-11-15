@@ -216,7 +216,7 @@ class FaissSearch:
             # 2. Thêm vào index và tìm kiếm
             self.index.add(vecs)
             sims, idxs = self.index.search(vecs, k)
-            
+            sims = (sims - sims.min()) / (sims.max() - sims.min()) # chuyển về [0,1]
             # 3. Chuyển đổi Similarity (độ tương đồng) thành Distance (khoảng cách)
             # Cosine Distance = 1.0 - Cosine Similarity
             dists = 1.0 - sims
@@ -233,6 +233,7 @@ class FaissSearch:
             self.index.add(bin_array)
             # dists trả về từ IndexBinaryFlat đã là khoảng cách Hamming
             dists, idxs = self.index.search(bin_array, k)
+            dists = (dists - dists.min()) / (dists.max() - dists.min())  # Chuẩn hóa về [0,1]
 
         # --- Bước 3: Gom cụm bằng Disjoint Set Union (DSU) ---
         
