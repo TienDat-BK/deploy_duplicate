@@ -109,24 +109,16 @@ vector<vector<VectorRecord>> LSHSearch::classifyByBand(const vector<VectorRecord
         {
             // lấy vecRecord đầu tiên làm seed
             int u = setOfVectorInSame[0];
-            while (setOfVectorInSame.size() > 1)
+
+            for (int i = setOfVectorInSame.size() - 1; i > 0; i--)
             {
-                for (int i = setOfVectorInSame.size() - 1; i > 0; i--)
+                // tinhk toán khoảng cách giữa các vecRecord trong cùng bucket
+                // nếu khoảng cách nhỏ hơn threshold thì gộp chúng lại
+                int v = setOfVectorInSame[i];
+                if (this->disFunc(setOfVecRecord[u], setOfVecRecord[v]) < this->threshold)
                 {
-                    // tinhk toán khoảng cách giữa các vecRecord trong cùng bucket
-                    // nếu khoảng cách nhỏ hơn threshold thì gộp chúng lại
-                    int v = setOfVectorInSame[i];
-                    if (this->disFunc(setOfVecRecord[u], setOfVecRecord[v]) < this->threshold)
-                    {
-                        dsu.unionSet(u, v);
-                        // xóa khỏi setOfVectorInSame để tránh tính toán lại
-                        swap(setOfVectorInSame[i], setOfVectorInSame.back());
-                        setOfVectorInSame.pop_back();
-                    }
+                    dsu.unionSet(u, v);
                 }
-                // xóa vecRecord đầu tiên khỏi setOfVectorInSame để tránh tính toán lại
-                swap(setOfVectorInSame[0], setOfVectorInSame.back());
-                setOfVectorInSame.pop_back();
             }
         }
     }

@@ -1,14 +1,18 @@
-import pandas as pd
+from source.Preprocessor import *
+if __name__ == "__main__":
+    import time
 
-df = pd.read_csv("dataset/dataset_small.csv")
+    # Test nhỏ
+    texts = ["hello world " * 1000] * 200  # ~50k ký tự
+    sh = Shingling(k=5)
 
-no_rows = df[df["is_duplicate"] == "1"].head(20)
-yes_rows = df[df["is_duplicate"] == "0"].head(10)
-df = pd.concat([no_rows, yes_rows], ignore_index=True)
-df = df[["question1", "question2"]]
+    start = time.time()
+    sh(texts)
+    print(f"Nhỏ: {time.time() - start:.3f}s")
 
-new_df = pd.DataFrame({"text" : pd.concat([df["question1"], df["question2"]], ignore_index=True)})
-
-new_df.to_csv("dataset/modified_dataset_question_2.csv", index=False)
-
-
+    # Test lớn
+    start = time.time()
+    texts = ["hello world " * 1000] * 20000  # ~2MB
+    start = time.time()
+    sh(texts)
+    print(f"Lớn: {time.time() - start:.3f}s")

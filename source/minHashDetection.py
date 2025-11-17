@@ -9,6 +9,8 @@ class MinHashDetection:
         self.outputDim = 64
 
         self.searcher = LSHSearch()
+        self.searcher.bandSize = 8
+        self.searcher.threshold = 0.8
         self.searcher.setDisFunc("jarcard")
 
     def detect(self, ListOfText : list ):
