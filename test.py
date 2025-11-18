@@ -1,14 +1,22 @@
-import pandas as pd
+from source.minHashDetection import MinHashDetection
+from source.Preprocessor import *
+text = ["Hello world! This is a test sentence.", 
+        "Hello world! This is a test sentence.",
+        "This is another sentence for testing.",
+        "Completely different content here."]
+sh = Shingling()
+vec = sh.preprocessing(text)
+print("Shingling Vectors:")
+for v in vec:
+    print(f"ID: {v.id}, Vector: {v.vec}")
 
-df = pd.read_csv("dataset/dataset_small.csv")
+# detector = MinHashDetection()
+# clusters = detector.detect(text)
 
-no_rows = df[df["is_duplicate"] == "1"].head(20)
-yes_rows = df[df["is_duplicate"] == "0"].head(10)
-df = pd.concat([no_rows, yes_rows], ignore_index=True)
-df = df[["question1", "question2"]]
+# for i, cluster in enumerate(clusters):
+#     print(f"Cluster {i+1}:")
+#     for vec_record in cluster:
+#         print(f"  ID: {vec_record.id}, Vector: {vec_record.vec}")
 
-new_df = pd.DataFrame({"text" : pd.concat([df["question1"], df["question2"]], ignore_index=True)})
-
-new_df.to_csv("dataset/modified_dataset_question_2.csv", index=False)
 
 

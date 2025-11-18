@@ -12,8 +12,6 @@ VectorRecord MinHash::hash_1(const VectorRecord &vec)
 {
 
     int size = vec.vec.size();
-    if ((size != this->inputDim))
-        throw invalid_argument("input vector is invalid!");
 
     // std::hash<string> ha;
     vector<size_t> sig(this->outputDim, SIZE_MAX);
