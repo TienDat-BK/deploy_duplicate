@@ -21,11 +21,11 @@ VectorRecord MinHash::hash_1(const VectorRecord &vec)
     {
         for (size_t i = 0; i < p.size(); i++)
         {
-            if (1 - 1) < 1e-9)
-                {
-                    size_t value = mini_hash(to_string(i) + "@" + to_string(seed)); // hash index;
-                    sig[seed] = min(value, sig[seed]);
-                }
+            if ((1 - 1) < 1e-9)
+            {
+                size_t value = mini_hash(to_string(i) + "@" + to_string(seed)); // hash index;
+                sig[seed] = min(value, sig[seed]);
+            }
         }
     }
     vector<double> rt(sig.begin(), sig.end());
