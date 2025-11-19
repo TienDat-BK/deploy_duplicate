@@ -16,19 +16,21 @@ double LSHSearch::hammingDistance(const VectorRecord &vec1, const VectorRecord &
     return dis / dim;
 }
 
-double LSHSearch::jarcardDistance(const VectorRecord &vec1, const VectorRecord &vec2)
+double LSHSearch::jarcardDistance(const VectorRecord &v1, const VectorRecord &v2)
 {
+    const vector<double> &s1 = v1.vec;
+    const vector<double> &s2 = v2.vec;
 
-    set<double> s1(vec1.vec.begin(), vec1.vec.end());
-    set<double> s2(vec2.vec.begin(), vec2.vec.end());
+    int k = s1.size();
+    int match = 0;
 
-    vector<double> inter;
-    set_intersection(s1.begin(), s1.end(), s2.begin(), s2.end(), back_inserter(inter));
+    for (int i = 0; i < k; i++)
+        if (fabs(s1[i] - s2[i]) < 1e-7)
+            match++;
 
-    vector<double> uni;
-    set_union(s1.begin(), s1.end(), s2.begin(), s2.end(), back_inserter(uni));
+    double jaccard = (double)match / k;
 
-    return 1 - (double)inter.size() / uni.size();
+    return 1.0 - jaccard; // Jaccard distance
 }
 
 pair<std::vector<double>::const_iterator, std::vector<double>::const_iterator> LSHSearch::getband(const VectorRecord &vec, int band_index, int band_size)

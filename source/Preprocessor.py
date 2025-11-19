@@ -1,5 +1,6 @@
 from HSmodule import *
 from sentence_transformers import SentenceTransformer
+import mmh3
 
 from ftfy import fix_text
 import re
@@ -12,33 +13,24 @@ def normalizing(text: str):
         return text
 
 class Shingling:
-  def __init__(self, k : int = 5):
+  def __init__(self, k : int = 3):
     self.k = k
-    
-
-  
-
-  def shingle(self, text : str):
-    text = normalizing(text)
-    shingles = list()
-    for i in range(len(text) - self.k + 1):
-      shingles.append(text[i:i+self.k])
-    return set(shingles)
 
   def preprocessing(self, texts : list):
-        # input list(string) - output list(VectorRecord)
-        # k ở đây là n-gram size
-        # tạo shingle sets
-        shingling = Shingling(self.k)
-        shingles_set = [shingling.shingle(t) for t in texts]  #O(n)    n là tổng độ dài toàn bộ văn bản
+        # cho ra output la vector shingle
+        listVecShingle = []
+        mask = (1 << 40) - 1
+        for text in texts:
+            # chuẩn hóa văn bản
+            text = normalizing(text)
 
-        # tạo vocab
-        vocab = list(set().union(*shingles_set))    #O(n)
-
-        # ánh xạ nhị phân
-        vectors = [[1 if x in s else 0 for x in vocab] for s in shingles_set]   #O(m x V)     m là số văn bản, V là số phần tử của vocab
-        listVecRecord = [VectorRecord(vec = x, id = id ) for id, x in enumerate(vectors)]       #O(m)
-
+            vecHashShingle = []
+            for i in range(len(text) - self.k + 1):
+                shingle = text[i:i + self.k]
+                vecHashShingle.append(mmh3.hash64(shingle)[0] & mask)
+            
+            listVecShingle.append(vecHashShingle)
+        listVecRecord = [VectorRecord(vec = v, id = id ) for id, v in enumerate(listVecShingle)]
         return listVecRecord
   
   def __call__(self, text : list):

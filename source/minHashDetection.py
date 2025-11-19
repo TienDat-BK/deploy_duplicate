@@ -12,7 +12,7 @@ class MinHashDetection:
         self.searcher.bandSize = 8
         self.searcher.threshold = 0.8
         self.searcher.setDisFunc("jarcard")
-
+        self.searcher.threshold = 0.6875
     def detect(self, ListOfText : list ):
         ListOfVecRecord = self.preprocessor(ListOfText)  
 
