@@ -19,6 +19,7 @@ class Shingling:
   def preprocessing(self, texts : list):
         # cho ra output la vector shingle
         listVecShingle = []
+        mask = (1 << 40) - 1
         for text in texts:
             # chuẩn hóa văn bản
             text = normalizing(text)
@@ -26,7 +27,7 @@ class Shingling:
             vecHashShingle = []
             for i in range(len(text) - self.k + 1):
                 shingle = text[i:i + self.k]
-                vecHashShingle.append(mmh3.hash64(shingle)[0])
+                vecHashShingle.append(mmh3.hash64(shingle)[0] & mask)
             
             listVecShingle.append(vecHashShingle)
         listVecRecord = [VectorRecord(vec = v, id = id ) for id, v in enumerate(listVecShingle)]

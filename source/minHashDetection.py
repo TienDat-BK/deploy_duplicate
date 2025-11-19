@@ -10,7 +10,7 @@ class MinHashDetection:
 
         self.searcher = LSHSearch()
         self.searcher.setDisFunc("jarcard")
-
+        self.searcher.threshold = 0.6875
     def detect(self, ListOfText : list ):
         ListOfVecRecord = self.preprocessor(ListOfText)  
 
