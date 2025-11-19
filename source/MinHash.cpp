@@ -5,7 +5,7 @@
 size_t mini_hash(const string &in)
 {
     std::hash<string> ha;
-    return ha(in) % 1000000;
+    return ha(in);
 }
 
 VectorRecord MinHash::hash_1(const VectorRecord &vec)
@@ -21,11 +21,9 @@ VectorRecord MinHash::hash_1(const VectorRecord &vec)
     {
         for (size_t i = 0; i < p.size(); i++)
         {
-            if ((1 - 1) < 1e-9)
-            {
-                size_t value = mini_hash(to_string(i) + "@" + to_string(seed)); // hash index;
-                sig[seed] = min(value, sig[seed]);
-            }
+
+            size_t value = (mini_hash(to_string(p[i]) + to_string(seed << 12)) ^ (seed * 0x9e3779b97f4a7c15ULL)) % 10000000; // hash index;
+            sig[seed] = min(value, sig[seed]);
         }
     }
     vector<double> rt(sig.begin(), sig.end());
