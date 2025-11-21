@@ -71,8 +71,9 @@ class FaissSearch:
         
         if self.metric == "cosine":
             # Tạo 1 đồ thị HNSW trong không gian 'dim' chiều, mỗi node có tối đa 32 cạnh
-            self.index = faiss.IndexFlatIP(self.dim)
-            
+            self.index = faiss.IndexHNSWFlat(self.dim, 32, faiss.METRIC_INNER_PRODUCT)
+            self.index.hnsw.efConstruction = 200
+            self.index.hnsw.efSearch = 120
             
             # Dùng Tích vô hướng. Khi vector đã L2-normalized, nó tương đương Cosine Sim.
             self.index.metric_type = faiss.METRIC_INNER_PRODUCT 
