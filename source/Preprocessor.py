@@ -24,12 +24,13 @@ class Shingling:
             # chuẩn hóa văn bản
             text = normalizing(text)
 
-            vecHashShingle = []
+            
+            st = set()
             for i in range(len(text) - self.k + 1):
                 shingle = text[i:i + self.k]
-                vecHashShingle.append(mmh3.hash64(shingle)[0] & mask)
+                st.add(mmh3.hash64(shingle)[0] & mask)
             
-            listVecShingle.append(vecHashShingle)
+            listVecShingle.append(list(st))
         listVecRecord = [VectorRecord(vec = v, id = id ) for id, v in enumerate(listVecShingle)]
         return listVecRecord
   

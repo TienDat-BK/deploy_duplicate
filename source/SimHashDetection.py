@@ -11,6 +11,7 @@ class SimHashDetection:
         self.outputDim = 64
 
         self.searcher = LSHSearch()
+        self.searcher.bandSize = 3
         self.searcher.threshold = 0.1953125
         self.searcher.setDisFunc("hamming")
         

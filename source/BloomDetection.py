@@ -5,17 +5,18 @@ from source.Preprocessor import Shingling, TextEmbedder
 class BloomDetection:
     def __init__(self):
         self.preprocessor = TextEmbedder()
-        self.Bloom = BloomFilter(self.preprocessor.lenOfVector, self.preprocessor.lenOfVector, 10000, 0.01)
+        # self.Bloom = BloomFilter(self.preprocessor.lenOfVector, self.preprocessor.lenOfVector, 10000, 0.01)
 
         self.hasher = SimHash()
         self.outputDim = 64
+        
         self.searcher = FaissSearch()
         self.searcher.setDisFunc("cosine")
-        self.searcher.threshold = 0.091
+        self.searcher.threshold = 0.0919639519681913
 
     def detect(self, ListOfText : list ):
         ListOfVecRecord = self.preprocessor(ListOfText)  
-        ListOfVecRecord = self.Bloom.hash(ListOfVecRecord)
+        # ListOfVecRecord = self.Bloom.hash(ListOfVecRecord)
         # cấu hình hasher cho phù hợp với kích thước vector đầu vào
         sizeOfVector = len(ListOfVecRecord[0].vec)
         self.hasher.setInOutput( sizeOfVector, self.outputDim)
