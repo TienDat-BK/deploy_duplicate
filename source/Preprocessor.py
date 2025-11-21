@@ -47,7 +47,7 @@ class TextEmbedder:
         # chuẩn hóa văn bản
         texts = [normalizing(t) for t in texts]
 
-        embeddings = self.model.encode(texts)   #O(n)    n là tổng độ dài toàn bộ văn bản
+        embeddings = self.model.encode(texts, normalize_embeddings=True)   #O(n)    n là tổng độ dài toàn bộ văn bản
         listVecRecord = [VectorRecord(vec = emb, id = id ) for id, emb in enumerate(embeddings)]   #O(m)
 
         return listVecRecord
