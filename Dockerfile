@@ -28,7 +28,7 @@ COPY . .
 RUN python setup.py build_ext --inplace
 
 # Expose port for web app (Gradio, Flask...)
-EXPOSE 7860
+EXPOSE 10000
 
 # Run visualize.py when container starts
 CMD ["python", "visualize.py"]
