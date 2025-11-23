@@ -18,7 +18,6 @@ COPY requirements.txt .
 
 # Install Python dependencies + build dependencies
 RUN pip install --upgrade pip setuptools wheel pybind11 \
-    && pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu \
     && pip install -r requirements.txt
 
 # Copy entire project
