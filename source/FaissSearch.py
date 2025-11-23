@@ -27,7 +27,7 @@ class FaissSearch:
         # Các thuộc tính này sẽ được thiết lập bởi các hàm setter
         self.index: Optional[Union[faiss.Index, faiss.IndexBinary]] = None
         self.metric: Optional[str] = None  # "cosine" hoặc "hamming"
-        self.dim: int = 0                  # Số chiều của vector (sẽ tự động cập nhật)
+        self.dim: int = 64                  # Số chiều của vector (sẽ tự động cập nhật)
         self.bbit: int = bbit
 
     def setDisFunc(self, metric: str):
