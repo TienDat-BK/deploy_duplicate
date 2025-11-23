@@ -1,0 +1,16 @@
+# Thư mục cache Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Thư mục logs
+*.log
+
+evalData/
+
+# Thư mục git
+.git/
+.gitignore
+
+.vscode/
+.venv/

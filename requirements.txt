@@ -1,6 +1,8 @@
 numpy
-sentence_transformers
+sentence-transformers
 ftfy
 faiss-cpu
 pandas
 mmh3
+gradio
+python-docx
