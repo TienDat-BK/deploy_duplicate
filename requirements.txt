@@ -1,4 +1,5 @@
 numpy
+sentence-transformers
 ftfy
 faiss-cpu
 pandas
