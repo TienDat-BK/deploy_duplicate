@@ -192,5 +192,6 @@ with gr.Blocks(title="Duplicate Text Detector") as demo:
         inputs=[file_input, method_choice],
         outputs=[html_output_1, html_output_2, file_output]
     )
-
-demo.launch(server_name="0.0.0.0", server_port=7860)
+    
+port = int(os.environ.get("PORT", 10000))  # Render cung cấp PORT, fallback 10000 khi chạy local
+demo.launch(server_name="0.0.0.0", server_port=port)
