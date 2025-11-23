@@ -8,13 +8,13 @@ import re
 from ftfy import fix_text
 
 from HSmodule import *
-from source.FaissSearch import *
+# from source.FaissSearch import *
 
-from source.BloomDetection import *
-from source.Preprocessor import *
-from source.SimHashDetection import *
+# from source.BloomDetection import *
+# from source.Preprocessor import *
+# from source.SimHashDetection import *
 from source.minHashDetection import *
-from sentence_transformers import SentenceTransformer
+# from sentence_transformers import SentenceTransformer
 
 
 def read_file(filepath):
@@ -39,18 +39,18 @@ def read_file(filepath):
         raise ValueError("Không tìm thấy cột 'text' / 'content' / 'paragraph' trong file CSV hoặc file không hợp lệ.")
     return paragraphs
 
-modelSimHash = SimHashDetection()
+# modelSimHash = SimHashDetection()
 modelMinHash = MinHashDetection()
-modelBloomFaiss = BloomDetection()
+# modelBloomFaiss = BloomDetection()
 
-def run_SimHash(paragraphs : list[str]) -> list[list[VectorRecord]]:
-    doing = modelSimHash
-    return doing.detect(paragraphs)
+# def run_SimHash(paragraphs : list[str]) -> list[list[VectorRecord]]:
+#     doing = modelSimHash
+#     return doing.detect(paragraphs)
 
 
-def run_Bloom_Sim_Faiss(paragraphs : list[str]) -> list[list[VectorRecord]]:
-    doing = modelBloomFaiss
-    return doing.detect(paragraphs)
+# def run_Bloom_Sim_Faiss(paragraphs : list[str]) -> list[list[VectorRecord]]:
+#     doing = modelBloomFaiss
+#     return doing.detect(paragraphs)
 
 
 def run_Min(paragraphs : list[str]) -> list[list[VectorRecord]]:
@@ -67,11 +67,8 @@ def duplication_text(filepath : str, method : str):
 
     # tach du lieu
     paragraphs = read_file(filepath)
-    if method == "SimHash (Semantic)":
-      ans = run_SimHash(paragraphs)
-    elif method == "Bloom + Faiss (Semantic)":
-      ans = run_Bloom_Sim_Faiss(paragraphs)
-    elif method == "MinHash (Syntax)":
+    
+    if method == "MinHash (Syntax)":
       ans = run_Min(paragraphs)
 
     # loc van ban dai dien
